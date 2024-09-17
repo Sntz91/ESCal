@@ -1,0 +1,71 @@
+\documentclass[conference, a4paper]{IEEEtran}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{enumitem}
+\usepackage{booktabs,ragged2e}
+\usepackage{balance}
+% \usepackage{hyperref}
+
+\setlength\tabcolsep{0pt} 
+\renewcommand\IEEEkeywordsname{Keywords}
+
+\title{ESCal: Efficient and Scalable Calibration of Camera Networks Using a Top View}
+\author{
+	\IEEEauthorblockN{Tobias Ziegler\IEEEauthorrefmark{1}, Marcel Müller\IEEEauthorrefmark{2}, Abdelmajid Khelil\IEEEauthorrefmark{3}}
+	\IEEEauthorblockA{Institute for Data and Process Science, Landshut University of Applied Sciences, Germany
+	\\\ \IEEEauthorrefmark{1}ziegleto@gmail.com, \IEEEauthorrefmark{2}marcel.mueller.93@t-online.de, \IEEEauthorrefmark{3}abdelmajid.khelil@haw-landshut.de}
+}
+
+\IEEEoverridecommandlockouts
+\IEEEpubid{\makebox[\columnwidth]{979-8-3503-7903-7/24/\$31.00~\copyright2024 IEEE \hfill}
+\hspace{\columnsep}\makebox[\columnwidth]{ }}
+
+\begin{document}
+
+\maketitle
+
+\IEEEpubidadjcol
+
+\begin{abstract}
+Calibrating camera networks is a complex yet crucial task for ensuring 
+accurate data collection, particularly for large-scale scenarios. 
+This work's main contribution is a method for efficiently estimating the 
+network's extrinsic paramaters for every camera. It also determines their 
+effective coverage without requiring overlapping fields of view. 
+We propose ESCal, an efficient 
+and scalable solution that 
+leverages homographies and point correspondences while disregarding their 
+prerequisite of planar 
+scenes. It semi-automatically determines the pose of the considered 
+cameras given one top view of the scene. Our approach is designed to be 
+fast, easy to use, scalable, and sufficiently accurate. We demonstrate these 
+qualities under real-world conditions.
+\end{abstract}
+
+\vspace{10pt}
+
+\begin{IEEEkeywords}
+	Camera Calibration, Homography, Extrinsic Calibration, Field of View, Non-Overlapping Field of View, Camera Networks
+\end{IEEEkeywords}
+
+
+\input{sections/introduction.tex}
+\input{sections/related_work.tex}
+\input{sections/background.tex}
+\input{sections/problem_statement.tex}
+\input{sections/solution.tex}
+\input{sections/experiments.tex}
+\input{sections/conclusion.tex}
+
+\medskip
+
+\bibliographystyle{IEEEtran}
+% \bibliographystyle{unsrt}
+\balance
+\bibliography{refs}
+
+\end{document}

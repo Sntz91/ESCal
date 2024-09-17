@@ -1,0 +1,35 @@
+\subsection{Best Practices} 
+Following the above experimental studies, we recommend the following 
+best practices for using homographies under real world conditions:
+\begin{itemize}
+	\item Avoid collinear points.
+	\item Spread reference points widely and capture many characteristics of the scene.
+	\item Use more than four reference points, although four can be enough.
+	\item Avoid low pixel densities and perspectives: Place the 
+		cameras high, with steep angles.
+	\item When using automatic methods and unable to ensure high-quality reference point pairs, use RANSAC.
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:conclusion}
+In this work, we proposed ESCal, a method for quickly determining the pose of all 
+cameras within a CN and evaluating the network's effective coverage. 
+Hereby, we demonstrated that homographies, although assuming planar 
+scenes, are applicable in real-world environments\textemdash provided some 
+countermeasures we defined in this paper. With the right prerequisites, 
+we achieved an accuracy of approximately $6$ cm with low-cost cameras. 
+Higher camera resolutions further reduce this error. For example, 
+this calibration technique enabled an application for localizing 
+and tracking road users within a traffic scene during the 
+5-Safe research project in Landshut.
+
+Sufficient accuracy, ease of use, time efficiency, and scalability while 
+not requiring overlapping fields of view, underline ESCal's potential 
+for practical applications, particularly in urban settings. 
+Our proposed best practices further simplify the application of our 
+approach in various real-world scenes and application scenarios. 
+
+In the future, we plan to automatically detect the reference point pairs 
+within the top and perspective views. Additionally, it might be possible 
+to specify the effective field of view automatically, e.g., by using 
+semantic segmentation.

@@ -1,0 +1,96 @@
+\section{The ESCal Approach}
+\label{sec:solution}
+Initially, we used Zhang's \cite{zhang2000} method to calibrate our 
+cameras intrinsically. This approach involves capturing images of 
+a checkerboard pattern from several perspectives. It is  
+fast and can be used before mounting the cameras. However, we still need 
+to relate our installed cameras' coordinate systems, determine their 
+pose, and estimate the CN's coverage.
+
+First, we have to determine a common world coordinate system. 
+We used an Unmanned Aerial Vehicle (UAV) to capture a detailed and comprehensive 
+image of the entire scene. Alternatively, ortho-imagery can be used if 
+available, up-to-date, and if it provides a sufficient resolution.
+We refer to this image as the top view, which represents the global coordinate 
+system and is shared among all cameras. Within this image, we can 
+estimate each camera's pose, field of view, and further measurements of 
+interest. 
+
+Finally, we have to find the homography between a camera's image and the top view. 
+We use the homography and the camera's intrinsics to determine its extrinsic 
+parameters within the global coordinate system. Thus, we need to identify 
+at least four shared points, lying on a plane 
+with $Z=0$.
+
+Mathematically, we  refer to an image captured by a camera $p$ 
+as its perspective view. For each perspective view $p$, we identify
+$n_{p} \geq 4$ reference point pairs. A reference point 
+$\mathbf{x}_p^i$ denotes the $i$-th reference point within the perspective 
+view's image $p$, and the corresponding point $\mathbf{X}_{t}^i$ denotes 
+the $i$-th reference point within the top view $t$. We can estimate 
+the homography matrix $\mathrm{H}_p$ with four pairs of reference points. 
+Each pair provides two equations, and the homography matrix has eight 
+degrees of freedom:
+\begin{equation}
+\begin{bmatrix}
+	X_t^i \\ Y_t^i \\ W_t^i
+\end{bmatrix}
+= 
+\mathrm{H}_p
+\begin{bmatrix}
+	x_p^i \\ y_p^i \\ w_p^i 
+\end{bmatrix}, \quad \forall i \in \{1, 2, ..., n_p\}.
+\end{equation}
+Due to noisy measurements, we need optimization techniques such as least 
+squares or RANSAC to solve the system of linear equations.
+
+After calculating the homography matrix $\mathrm{H}_p$ for 
+each perspective view,
+we can relate each point $\mathbf{x}_p$ (with $Z=0$) from the 
+perspective view to the top view $\mathbf{X}_t$ and vice versa:
+\begin{equation}
+\begin{aligned}
+	\mathbf{X}_t & = \mathrm{H}_p\mathbf{x}_p \\
+	\mathbf{x}_p & = \mathrm{H}^{-1}_p\mathbf{X}_t.
+\end{aligned}
+\end{equation}
+
+Now, we are able to identify the coverage of the camera network: For each camera, 
+we specify the points that define its field of view and map them 
+onto the top view, ignoring occlusions like trees to determine the effective  
+field of view. In fact, we can transform every measurement within a 
+camera's image into the top view\textemdash provided the measurement lies on 
+the ground.
+
+Finally, given the homography matrix $\mathrm{H}$ and the camera 
+intrinsics $\mathrm{K}$, we can estimate the position and rotation for 
+each camera within the top view's coordinate system:
+\begin{equation}
+\begin{aligned}
+	\mathrm{H}^{-1} & = \begin{bmatrix} \mathbf{h}_1^{-1} & 
+	\mathbf{h}_2^{-1} & \mathbf{h}_3^{-1} \end{bmatrix} \\
+	\mathbf{r_1} & = \lambda\mathrm{K}^{-1}\mathbf{h}_1^{-1} \\ 
+	\mathbf{r_2} & = \lambda\mathrm{K}^{-1}\mathbf{h}_2^{-1} \\ 
+	\mathbf{r_3} & = \mathbf{r_1} \times \mathbf{r_2} \\ 
+	\boldsymbol{X}_0 & = \lambda \left( {-R} \mathrm{K}^{-1} \mathbf{h}_3 \right).
+\end{aligned}
+\end{equation}
+Note that we use the inverse homography because our $\mathrm{H}_p$ matrices
+transform points from the image coordinate system into the world coordinate 
+system, and Equation (\ref{eq:pose_background}) does it the other way 
+around. Moreover, the resulting rotations are relative to the 
+approximately $-90$ degrees pitch of the top view image, and the 
+height value may be negative.
+
+It is noteworthy that the proposed method is applicable without interfering 
+with the scene. 
+We can use existing markers, such as road markings, as reference points. 
+If the image offers sufficient resolution and robust features, finding pairs 
+of reference points 
+could be automated using algorithms like SIFT \cite{lowe2004sift} 
+or Superpoint \cite{detone2018superpoint} and 
+SuperGlue \cite{sarlin2020superglue}. 
+However, because of the large perspective difference, we did not obtain 
+proper results. Otherwise, we can use a simple 
+GUI like the one we provide at GitHub\footnote{https://github.com/Sntz91/ipm\_tool} to make this 
+manual point-picking process easier.

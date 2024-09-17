@@ -1,0 +1,45 @@
+\subsection{Finding the Camera's Pose}
+As stated in Section \ref{sec:solution}, we determined the camera's 
+intrinsics in advance using Zhang's \cite{zhang2000} method. Moreover, 
+the dataset contains at least four marked point correspondences between each 
+perspective view and the top view. Accordingly, we determined the 
+homography matrix $\mathrm{H}_p$ for every camera. Consequently, we can 
+calculate every camera's location and rotation using Equation 
+(\ref{eq:pose_background}).
+Table \ref{tab:camera_pose} compares the logged results with our predictions.
+
+\begin{table}[hb]
+	\caption{Accuracy of the estimated camera poses}
+		\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}} l cccc}
+			\toprule
+			&
+			\multicolumn{2}{l}{\textbf{Estimated by ESCal}} & 
+			\multicolumn{2}{l}{\textbf{Measured by UAV}} \\
+			& Height [m] & Pitch [deg] & Height [m] & Pitch [deg] \\
+			\midrule
+			IMG\_01 & 10.0 & -40.5 & 10.3 & -43.0 \\
+			IMG\_02 & 10.1 & -41.0 & 10.3 & -43.0 \\
+			IMG\_03 & 10.2 & -41.7 & 10.3 & -43.0 \\
+			IMG\_04 & 10.3 & -41.8 & 10.4 & -43.0 \\
+			IMG\_05 & 10.0 & -36.4 & 10.3 & -38.1 \\
+			IMG\_06 & 2.6  & -24.7 & 3.2  & -27.8 \\
+			IMG\_07 & 10.3 & -34.9 & 10.3 & -38.5 \\
+			IMG\_08 & 2.8  & -29.9 & 2.8  & -32.1 \\
+			IMG\_09 & 9.8  & -41.0 & 10.1 & -43.5 \\
+			IMG\_10 & 7.7  & -36.2 & 7.9  & -38.7 \\
+			IMG\_11 & 7.7  & -44.4 & 7.9  & -47.3 \\
+			IMG\_12 & 10.3 & -34.7 & 10.3 & -36.8 \\
+			\bottomrule
+		\end{tabular*}
+	\label{tab:camera_pose}
+\end{table}
+
+This leads to an average rotational error of $2.4$ degrees. However, 
+several measurement errors contribute to this result. For example, the ground 
+truth values from the drone's logs contain inherent measurement inaccuracies. 
+Additionally, wind affects the drone's pose, violating our assumption of an 
+exact $-90$-degree pitch in our top view. In fact, we observe a 
+systematic error of approximately $+2$ degrees. 
+Figure \ref{fig:positions} shows 
+the estimated positions for the twelve cameras within the top view.
+

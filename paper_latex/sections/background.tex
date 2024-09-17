@@ -1,0 +1,101 @@
+\section{Preliminaries}
+\label{sec:background}
+A camera captures the real world by projecting objects from a 
+three-dimensional scene onto a two-dimensional image. 
+This transformation loses some information about the scene's characteristics, 
+such as its depth.
+However, with certain assumptions, we can describe objects in the 
+real world sufficiently to obtain a bidirectional mapping.
+
+\subsection{Notation}
+We use a notation similar to \cite{Hartley_Zisserman_2004} and 
+\cite{forstner2016photogrammetric}:
+Let $\mathcal{X}$ denote a point that can be represented in several ways: 
+Lowercase letters for two-dimensional and uppercase letters 
+for three-dimensional representations.
+Additionally, we differentiate between homogeneous coordinates $\mathbf{x}$
+and Euclidean coordinates $\boldsymbol{x}$. We describe vectors using
+bold letters $\mathbf{x}$ and scalars with the standard font $x, y$.
+For example, we use the following notation for a point $\mathcal{X}$ 
+in three-dimensional homogeneous coordinates 
+$\mathbf{X} = \begin{bmatrix} X & Y & Z & W \end{bmatrix}^\top$ -- and can 
+describe the same point in two-dimensional Euclidean coordinates
+as $\boldsymbol{x} = \begin{bmatrix} x & y \end{bmatrix}^\top$.
+
+\subsection{Coordinate Systems}
+We can distinguish between world-, camera-, image-, and sensor 
+coordinate systems. While the world coordinate system describes a 
+point $\mathcal{X}$ in the world, the camera coordinate system represents 
+the same point with respect to the camera's position. With an invertible 
+rigid body transformation, e.g., a translation and rotation, we can 
+swap from the world's to the camera's coordinate system and vice versa. 
+We can transform points from the camera coordinate system (3D) to the 
+image plane (2D) using a central projection. However, the transformation is 
+no longer invertible. Furthermore, invertible affine transformations 
+can transform points from the image plane to the sensor coordinate system.
+
+\subsection{Projecting 3D Points to 2D Pixels}
+A $3\times4$-dimensional matrix $\mathrm{P}_{3\times 4}$ describes the 
+transformation from world
+coordinates of a given point $\mathbf{X}$ to image coordinates $\mathbf{x}$.
+Mathematically, we express this linear mapping as follows:
+\begin{equation}
+\mathbf{x} = \mathrm{P}_{3\times 4}\mathbf{X}.
+\end{equation}
+
+The projection matrix $\mathrm{P}$ includes a camera's intrinsic and extrinsic 
+properties. Accordingly, we can decompose $\mathrm{P}$ into the 
+intrinsic camera matrix $\mathrm{K}$ and the camera's extrinsic 
+parameters\textemdash the rotation matrix $R$ and the 
+camera position $\boldsymbol{X}_O$; $I_3$ represents the identity matrix:
+\begin{equation}
+\mathrm{P}
+\mathbf{X}
+= 
+\mathrm{K}R \begin{bmatrix} I_3 & -\boldsymbol{X}_O \end{bmatrix}
+\mathbf{X}.
+\end{equation}
+
+\subsection{Homography}
+Note that the matrix $\mathrm{P}_{3\times4}$ is not invertible. However, by 
+assuming a planar scene ($Z=0$), we can find a bidirectional mapping 
+between image coordinates $\mathbf{x}$ and world coordinates $\mathbf{X}$. 
+We denote this projective 
+transformation as homography, defined as:
+\begin{equation}
+\mathbf{x} = \mathrm{H}_{3\times3}\mathbf{X}.
+\end{equation}
+This system of equations results in eight degrees of freedom. Thus, we 
+require at least four point correspondences 
+$\mathbf{x}^i \leftrightarrow \mathbf{X}^i$
+to estimate the homography 
+matrix $\mathrm{H}$. However, measurements in the 
+real world are messy and will most certainly violate the planar assumption. 
+Thus, the problem transforms into an optimization problem and can 
+be solved, e.g., with least squares or RANSAC \cite{ransac}.
+
+\subsection{Estimating the Camera's Pose}
+It is also possible to estimate the pose of a camera given some point 
+correspondences $\mathbf{x}^i \leftrightarrow \mathbf{X}^i$. This problem 
+is known as the Perspective-N-Point problem. The number of points 
+depends on the prerequisites. For instance, if the camera 
+intrinsics $\mathrm{K}$ are known, four points are sufficient
+\cite{grunert1841} to determine $R$ and $\boldsymbol{X}_O$ exactly. 
+However, if we know both the homography matrix $\mathrm{H}$, and the 
+camera intrinsics $\mathrm{K}$, we can estimate the pose 
+directly:
+\begin{equation}
+\begin{aligned}
+	\mathrm{H} & = \mathrm{K} \begin{bmatrix} \mathbf{r_1} & \mathbf{r_2} & \mathbf{t}\end{bmatrix} \\ 
+	\mathrm{K}^{-1}\mathrm{H} & 
+	= \mathrm{K}^{-1} \begin{bmatrix} \mathbf{h_1} & \mathbf{h_2} & \mathbf{h_3} \end{bmatrix}
+	= \begin{bmatrix} \mathbf{r_1} & \mathbf{r_2} & \mathbf{t}\end{bmatrix} \\
+	\mathbf{r_1} & = \lambda \mathrm{K}^{-1} \mathbf{h_1} \\
+	\mathbf{r_2} & = \lambda \mathrm{K}^{-1} \mathbf{h_2} \\
+	\mathbf{r_3} & = \mathbf{r_1} \times \mathbf{r_2} \\
+	\boldsymbol{X}_O & = \lambda \left( {-R} \mathrm{K}^{-1} \mathbf{h_3} \right),
+\end{aligned}
+\label{eq:pose_background}
+\end{equation}
+with $\lambda = \frac{1}{||\mathrm{K}^{-1} \mathbf{h_1}||}$ as scale factor,
+and $R=\begin{bmatrix} \mathbf{r_1} & \mathbf{r_2} & \mathbf{r_3} \end{bmatrix}$.

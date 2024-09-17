@@ -1,0 +1,37 @@
+\section{Experiments \& Results}
+\label{sec:experiments}
+\begin{figure}
+	\begin{center}
+		\includegraphics[width=0.45\textwidth]{figures/camera_positions.png}
+	\end{center}
+	\caption{The top view with the reference (white crosses) and validation points 
+	(blue crosses), and the estimated $x,y$-positions for each camera (hexagons) within 
+	the shared coordinate system.}
+	\label{fig:positions}
+\end{figure}
+
+To evaluate the accuracy of the ESCal method, we tested the homography within 
+a large-scale, non-planar environment of about $66$ m $\times$ $42$ m.
+We marked a traffic-practice area with 62 points by physically taping crosses 
+on the ground, distinguishing between 28 reference points and 34 validation points. 
+The reference points are used to determine the homography matrices, 
+while the validation points are used to calculate the reprojection errors. 
+The dataset is publicly available on GitHub\footnote{https://github.com/Sntz91/ESCal}. 
+
+Specifically, we captured the top view image using a DJI Mini 3 Pro consumer drone, 
+covering the scene from a bird's-eye view with a pitch of $-90$ degrees at 
+$50.2$ m height. Furthermore, we captured 12 
+perspective view images from various angles and heights, each featuring 
+different reference and validation point combinations\textemdash with varying 
+quality. The Inertial Measurement Unit (IMU) of our drone logged the pitch 
+and height for every image. The camera's sensor produces 12 MP images of 
+size $4000\times3000$ px. The twelve produced images IMG\_01, ..., IMG\_12 
+simultaneously represent the twelve camera positions as seen in Figure 
+\ref{fig:positions}.
+
+\input{sections/experiments/pose.tex}
+\input{sections/experiments/fov.tex}
+\input{sections/experiments/accuracy_homography.tex}
+\input{sections/experiments/point_compositions.tex}
+\input{sections/experiments/robustness.tex}
+\input{sections/experiments/perspective.tex}

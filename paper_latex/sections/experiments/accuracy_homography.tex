@@ -1,0 +1,58 @@
+\subsection{Overall Accuracy of a Homography within Real-World Scenarios}
+We consider all captured validation points to estimate the error 
+$\mathrm{E}_p$ (in pixels) for each perspective view. We transform 
+each validation point from the perspective view to the top view, 
+and calculate the distance to its actual location accordingly:
+\begin{equation}
+\begin{aligned}
+\mathrm{E}_{p} = \frac{1}{n_\text{val}} \sum_{i=1}^{n_\text{val}}{d(\mathbf{X}_{t}^{i}, \mathrm{H}_p\mathbf{x}_{p}^i)},
+\end{aligned}
+\end{equation}
+where the function $d$ returns the Euclidean distance; $n_\text{val}$ is the number of 
+validation points; $\mathbf{X}^{i}_{t}$ 
+is the $i$-th validation point represented in world coordinates and serving as
+ground truth; $\mathrm{H}_p$ is the corresponding homography matrix between 
+the top-view and the $p$-th ($p \in \{ 1, ..., 12 \}$) perspective view; 
+and $\mathbf{x}_{p}^i$ the corresponding validation point of the 
+perspective view. 
+
+Additionally, to calculate the error in meters rather than pixels, we need 
+to define a scale factor, i.e., the number of pixels per meter within 
+the top view\textemdash in 
+our case, $54.67$ pixels per meter. Although this introduces a perspective error 
+(as we used an entocentric lens), we captured the top view at $50.2$ meters height 
+and can neglect it. 
+
+Our findings, summarized in Table \ref{tab:results_overall}, provide a 
+comprehensive overview of the experimental results. On average, our predicted 
+points deviated from the ground truth by $15.28$ cm. However, it is 
+noteworthy that this average includes various point compositions, 
+image heights, and angles, leading to a wide range of results. 
+The validation points within IMG\_03 only deviated by an average of 
+$5.74$ cm (=$3.14$ px).
+
+\begin{table}
+\caption{Overall Results}
+%\begin{tabular}{ |p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|p{1.5cm}|  }
+% \begin{tabular}{|c | c c c c c|}
+\begin{tabular*}{\columnwidth}{@{\extracolsep{\fill}} l ccccc}
+\toprule
+\textbf{Image} & \textbf{Err} & \textbf{Std} & \textbf{ValPts} &  \textbf{Angle} & \textbf{Alt} \\
+& \textbf{[cm]} & \textbf{[cm]} & \textbf{[\#]} &  \textbf{[deg]} & \textbf{[m]} \\ [0.5ex]
+\midrule
+IMG\_01 & 6.95 & 3.40 & 6  & -43.0 & 10.3 \\
+IMG\_02 & 6.93 & 2.62 & 11 & -43.0 & 10.3 \\
+IMG\_03 & 5.74 & 5.67 & 9  & -43.0 & 10.3 \\
+IMG\_04 & 9.74 & 8.03 & 18 & -43.0 & 10.4 \\
+IMG\_05 & 7.67 & 6.74 & 14 & -38.1 & 10.3 \\
+IMG\_06 & 65.13 & 59.83 & 3  & -27.8 & 3.2 \\
+IMG\_07 & 11.90 & 9.09 & 18 & -38.5 & 10.3 \\
+IMG\_08 & 34.03 & 25.38 & 12 & -32.1 & 2.8 \\
+IMG\_09 & 8.94 & 4.15 & 10 & -43.5 & 10.1 \\
+IMG\_10 & 10.19 & 8.96 & 13 & -38.7 & 7.9 \\
+IMG\_11 & 7.59 & 6.04 & 6  & -47.3 & 7.9 \\
+IMG\_12 & 8.53 & 5.48 & 18 & -36.8 & 10.3 \\
+\bottomrule
+\end{tabular*}
+\label{tab:results_overall}
+\end{table}

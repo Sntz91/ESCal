@@ -1,0 +1,1 @@
+echo "xmodmap ~/.Xmodmap" >> ~/.xinitrc

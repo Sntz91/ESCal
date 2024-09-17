@@ -1,0 +1,46 @@
+\section{Related Work} 
+\label{sec:related_work}
+
+We can broadly categorize extrinsic camera calibration into 
+marker-based methods, those using external measurement devices, and 
+Structure from Motion (SfM) techniques. We refer to 
+Xia et al. \cite{xia2018global} for a more exhaustive overview.
+
+Marker-based methods rely on known reference objects or patterns, such as 
+checkerboards or fiducial markers, to calibrate the camera's pose. 
+For instance, Tsai \cite{tsai1987} uses 3-dimensional objects, 
+whereas Zhang \cite{zhang2000}
+simplifies the calibration process using planar patterns observed from 
+multiple viewpoints. Olson \cite{olson2011apriltag} introduced AprilTags 
+using bar codes. Marker-based methods alone tend to be low-cost, 
+and accurate while 
+remaining reasonably fast. However, they mostly require overlapping fields 
+of view. Mirrors \cite{raposo2017extrinsic, fuu2016automatic} can 
+enhance calibration patterns, and reduce required overlaps.
+
+Furthermore, key points from moving objects can be 
+used as markers, such as Truong et al. \cite{truong2019automatic} or 
+Paetzold et al. \cite{patzold2022online} suggest by detecting pedestrians.
+More generally, SfM \cite{tripicchio2022multi, xu2021wide} techniques estimate 
+the camera's pose by utilizing multiple 2D images. Specifically, SLAM methods 
+\cite{carrera2011slam, sola2008} determine the camera's position and a map by 
+moving within a scene. However, we use statically attached cameras and 
+single images for calibration.
+
+External measurement devices, such as laser trackers \cite{cheng2015} or 
+theodolites \cite{lu2004global} precisely measure the camera's 
+position and orientation. Those systems 
+offer high accuracy but come with significant costs and setup complexity. 
+On the other hand, Van Crombrugge et al. \cite{van2021extrinsic} use 
+low-cost lasers or projectors \cite{van2020extrinsic}, however, they also 
+assume planar scenes. Methods, such as \cite{liu2022targetless}, use lidars 
+and cameras, and are useful when calibrating multi-modal sensor networks. 
+Methods perhaps closest to our approach use a camera as an 
+external measurement device \cite{miyata2018}. 
+
+In contrast to the preceding work, we propose a low-cost
+solution for scattered, non-overlapping cameras. ESCal only
+requires a single image of each camera within the CN and a
+top view. It is applicable in a variety of real-world scenarios, as we 
+exhaustively showed in our experiments.
+
